@@ -47,6 +47,13 @@ class EnterpriseManager:
         if not isinstance(date, str):
             raise EnterpriseManagementException("Invalid date")
 
+        try:
+            parsed_date = datetime.strptime(date, "%d/%m/%Y")
+        except ValueError as exc:
+            raise EnterpriseManagementException("Invalid date") from exc
+
+
+
 
         project = EnterpriseProject(
             company_cif=company_cif,
