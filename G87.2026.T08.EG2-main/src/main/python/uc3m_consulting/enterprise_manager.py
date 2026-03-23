@@ -52,6 +52,10 @@ class EnterpriseManager:
         except ValueError as exc:
             raise EnterpriseManagementException("Invalid date") from exc
 
+        if parsed_date.year < 2025 or parsed_date.year > 2027:
+            raise EnterpriseManagementException("Invalid date")
+
+
 
 
 
