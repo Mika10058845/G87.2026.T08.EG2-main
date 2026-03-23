@@ -407,3 +407,16 @@ class TestEnterpriseManager(TestCase):
                 "30/11/2025",
                 49999.99
             )
+
+    def test_register_project_tc30_project_achronym_not_string(self):
+        obj = EnterpriseManager()
+
+        with self.assertRaises(EnterpriseManagementException):
+            obj.register_project(
+                "B12345678",
+                123455,
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "LOGISTICS",
+                "30/11/2025",
+                999999.99
+            )
