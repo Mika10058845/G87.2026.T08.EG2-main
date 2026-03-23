@@ -22,11 +22,15 @@ class EnterpriseManager:
         if not company_cif[1:].isdigit():
             raise EnterpriseManagementException("Invalid company_cif")
 
+        if not isinstance(project_achronym, str):
+            raise EnterpriseManagementException("Invalid project_achronym")
+
         if len(project_achronym) < 5 or len(project_achronym) > 10:
             raise EnterpriseManagementException("Invalid project_achronym")
 
         if not project_achronym.isalnum():
             raise EnterpriseManagementException("Invalid project_achronym")
+
 
         project = EnterpriseProject(
             company_cif=company_cif,
