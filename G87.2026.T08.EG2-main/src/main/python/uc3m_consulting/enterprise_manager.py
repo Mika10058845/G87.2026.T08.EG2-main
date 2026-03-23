@@ -31,6 +31,9 @@ class EnterpriseManager:
         if not project_achronym.isalnum():
             raise EnterpriseManagementException("Invalid project_achronym")
 
+        if not isinstance(project_description, str):
+            raise EnterpriseManagementException("Invalid project_description")
+
 
         project = EnterpriseProject(
             company_cif=company_cif,
