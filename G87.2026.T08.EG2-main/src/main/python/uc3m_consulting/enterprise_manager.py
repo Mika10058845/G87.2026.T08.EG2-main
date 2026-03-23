@@ -58,6 +58,9 @@ class EnterpriseManager:
         if not isinstance(budget, float):
             raise EnterpriseManagementException("Invalid budget")
 
+        if budget < 50000.00 or budget > 1000000.00:
+            raise EnterpriseManagementException("Invalid budget")
+
 
 
 
