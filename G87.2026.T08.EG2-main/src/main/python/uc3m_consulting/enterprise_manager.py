@@ -1,6 +1,7 @@
 """Module """
 import json
 from uc3m_consulting.enterprise_project import EnterpriseProject
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class EnterpriseManager:
     """Class for providing the methods for managing the orders"""
@@ -9,6 +10,9 @@ class EnterpriseManager:
 
     def register_project(self, company_cif, project_achronym,
                          project_description, department, date, budget):
+        if not isinstance(company_cif, str):
+            raise EnterpriseManagementException("Invalid company_cif")
+
         project = EnterpriseProject(
             company_cif=company_cif,
             project_acronym=project_achronym,
