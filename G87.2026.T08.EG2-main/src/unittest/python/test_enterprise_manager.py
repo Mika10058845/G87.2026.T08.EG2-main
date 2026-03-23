@@ -352,7 +352,7 @@ class TestEnterpriseManager(TestCase):
                 "ABCDE12345",
                 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "LOGISTICS",
-                "10/03/2026",
+                "19/02/2026",
                 999999.99
             )
 
