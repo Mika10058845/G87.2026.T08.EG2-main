@@ -1,9 +1,20 @@
+import json
+import os
 from unittest import TestCase
 from uc3m_consulting.enterprise_manager import EnterpriseManager
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 
 class TestEnterpriseManager(TestCase):
+    def setUp(self):
+        self.file_path = "corporate_operations.json"
+        with open(self.file_path, "w", encoding="utf-8") as file:
+            json.dump([], file)
+
+    def tearDown(self):
+        if os.path.exists(self.file_path):
+            os.remove(self.file_path)
+
     def test_register_project_tc01_valid_case(self):
         obj = EnterpriseManager()
 
@@ -17,6 +28,18 @@ class TestEnterpriseManager(TestCase):
         )
 
         self.assertEqual(value, "84a2b5abfa27576259e41a033d07cee7")
+
+        with open(self.file_path, "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]["company_cif"], "B12345678")
+        self.assertEqual(data[0]["project_achronym"], "ABC123")
+        self.assertEqual(data[0]["project_description"], "aaaaaaaaaa")
+        self.assertEqual(data[0]["department"], "HR")
+        self.assertEqual(data[0]["date"], "01/01/2025")
+        self.assertEqual(data[0]["budget"], 50000.00)
+        self.assertEqual(data[0]["project_id"], "84a2b5abfa27576259e41a033d07cee7")
 
     def test_register_project_tc02_valid_case(self):
         obj = EnterpriseManager()
