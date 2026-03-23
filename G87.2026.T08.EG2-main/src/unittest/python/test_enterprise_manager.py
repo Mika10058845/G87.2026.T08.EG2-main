@@ -379,7 +379,7 @@ class TestEnterpriseManager(TestCase):
                 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "LOGISTICS",
                 "30/11/2025",
-                999999.9
+                999999.971
             )
 
     def test_register_project_tc28_budget_above_maximum(self):
