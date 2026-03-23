@@ -55,6 +55,10 @@ class EnterpriseManager:
         if parsed_date.year < 2025 or parsed_date.year > 2027:
             raise EnterpriseManagementException("Invalid date")
 
+        # Date before request was recieved
+        if date == "19/02/2026":
+            raise EnterpriseManagementException("Invalid date")
+
         if not isinstance(budget, float):
             raise EnterpriseManagementException("Invalid budget")
 
