@@ -40,6 +40,9 @@ class EnterpriseManager:
         if not isinstance(department, str):
             raise EnterpriseManagementException("Invalid department")
 
+        if department not in ["HR", "FINANCE", "LEGAL", "LOGISTICS"]:
+            raise EnterpriseManagementException("Invalid department")
+
 
         project = EnterpriseProject(
             company_cif=company_cif,
