@@ -34,6 +34,9 @@ class EnterpriseManager:
         if not isinstance(project_description, str):
             raise EnterpriseManagementException("Invalid project_description")
 
+        if len(project_description) < 10 or len(project_description) > 30:
+            raise EnterpriseManagementException("Invalid project_description")
+
 
         project = EnterpriseProject(
             company_cif=company_cif,
