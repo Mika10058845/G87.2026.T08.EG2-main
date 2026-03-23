@@ -12,6 +12,8 @@ class EnterpriseManager:
                          project_description, department, date, budget):
         if not isinstance(company_cif, str):
             raise EnterpriseManagementException("Invalid company_cif")
+        if len(company_cif) != 9:
+            raise EnterpriseManagementException("Invalid company_cif")
 
         project = EnterpriseProject(
             company_cif=company_cif,
