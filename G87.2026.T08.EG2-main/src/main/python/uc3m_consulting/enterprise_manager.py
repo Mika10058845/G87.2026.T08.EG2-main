@@ -61,6 +61,11 @@ class EnterpriseManager:
         if budget < 50000.00 or budget > 1000000.00:
             raise EnterpriseManagementException("Invalid budget")
 
+        if round(budget, 2) != budget:
+            raise EnterpriseManagementException("Invalid budget")
+
+
+
 
 
 
