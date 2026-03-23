@@ -34,11 +34,11 @@ class TestEnterpriseManager(TestCase):
 
         self.assertEqual(len(data), 1)
         self.assertEqual(data[0]["company_cif"], "B12345678")
-        self.assertEqual(data[0]["project_achronym"], "ABC123")
+        self.assertEqual(data[0]["project_acronym"], "ABC123")
         self.assertEqual(data[0]["project_description"], "aaaaaaaaaa")
         self.assertEqual(data[0]["department"], "HR")
-        self.assertEqual(data[0]["date"], "01/01/2025")
-        self.assertEqual(data[0]["budget"], 50000.00)
+        self.assertEqual(data[0]["starting_date"], "01/01/2025")
+        self.assertEqual(data[0]["project_budget"], 50000.00)
         self.assertEqual(data[0]["project_id"], "84a2b5abfa27576259e41a033d07cee7")
 
     def test_register_project_tc02_valid_case(self):
