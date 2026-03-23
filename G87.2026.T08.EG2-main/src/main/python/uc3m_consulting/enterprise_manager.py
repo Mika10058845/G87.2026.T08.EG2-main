@@ -25,6 +25,9 @@ class EnterpriseManager:
         if len(project_achronym) < 5 or len(project_achronym) > 10:
             raise EnterpriseManagementException("Invalid project_achronym")
 
+        if not project_achronym.isalnum():
+            raise EnterpriseManagementException("Invalid project_achronym")
+
         project = EnterpriseProject(
             company_cif=company_cif,
             project_acronym=project_achronym,
