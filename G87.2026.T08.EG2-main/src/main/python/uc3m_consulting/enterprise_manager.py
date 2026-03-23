@@ -2,6 +2,7 @@
 import json
 from uc3m_consulting.enterprise_project import EnterpriseProject
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
+from datetime import datetime
 
 class EnterpriseManager:
     """Class for providing the methods for managing the orders"""
@@ -42,6 +43,9 @@ class EnterpriseManager:
 
         if department not in ["HR", "FINANCE", "LEGAL", "LOGISTICS"]:
             raise EnterpriseManagementException("Invalid department")
+
+        if not isinstance(date, str):
+            raise EnterpriseManagementException("Invalid date")
 
 
         project = EnterpriseProject(
