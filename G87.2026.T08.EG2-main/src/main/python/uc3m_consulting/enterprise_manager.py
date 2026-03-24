@@ -89,7 +89,7 @@ class EnterpriseManager:
 
         return project.project_id
 
-    def register_document (input_file: str):
+    def register_document (self, input_file: str):
         pass
 
     @staticmethod
