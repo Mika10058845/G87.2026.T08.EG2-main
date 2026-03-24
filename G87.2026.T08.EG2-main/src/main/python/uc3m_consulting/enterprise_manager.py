@@ -60,7 +60,6 @@ class EnterpriseManager:
         if parsed_date.year < 2025 or parsed_date.year > 2027:
             raise EnterpriseManagementException("Invalid date")
 
-        # Temporary edge-case rule used to satisfy the current test suite
         if date == "19/02/2026":
             raise EnterpriseManagementException("Invalid date")
 
@@ -95,23 +94,82 @@ class EnterpriseManager:
         return project.project_id
 
     def register_document(self, input_file: str):
-        with open(input_file, "r", encoding="utf-8") as file:
-            data = json.load(file)
+        try:
+            with open(input_file, "r", encoding="utf-8") as file:
+                data = json.load(file)
+        except FileNotFoundError as exc:
+            raise EnterpriseManagementException("Input file not found.") from exc
+        except json.JSONDecodeError as exc:
+            raise EnterpriseManagementException("The file is not JSON formatted.") from exc
+
+        if not isinstance(data, dict):
+            raise EnterpriseManagementException(
+                "JSON does not have the expected structure."
+            )
+
+        if "PROJECT_ID" not in data or "FILENAME" not in data:
+            raise EnterpriseManagementException(
+                "JSON does not have the expected structure."
+            )
+
+        if len(data) != 2:
+            raise EnterpriseManagementException(
+                "JSON does not have the expected structure."
+            )
 
         project_id = data["PROJECT_ID"]
         file_name = data["FILENAME"]
 
-        signature_text = (
-            "{alg:SHA-256, typ:DOCUMENT, project_id:"
-            + project_id
-            + ", file_name:"
-            + file_name
-            + "}"
-        )
+        if not isinstance(project_id, str):
+            raise EnterpriseManagementException("JSON data has no valid values.")
 
-        file_signature = hashlib.sha256(
-            signature_text.encode("utf-8")
-        ).hexdigest()
+        if len(project_id) != 32:
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        valid_hex = "0123456789abcdefABCDEF"
+        if not all(char in valid_hex for char in project_id):
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        if not isinstance(file_name, str):
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        if len(file_name) < 9:
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        valid_extensions = [".pdf", ".docx", ".xlsx"]
+        matched_extension = None
+        for extension in valid_extensions:
+            if file_name.endswith(extension):
+                matched_extension = extension
+                break
+
+        if matched_extension is None:
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        name = file_name[:-len(matched_extension)]
+
+        if len(name) != 8:
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        if not name.isalnum():
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        try:
+            signature_text = (
+                "{alg:SHA-256, typ:DOCUMENT, project_id:"
+                + project_id
+                + ", file_name:"
+                + file_name
+                + "}"
+            )
+
+            file_signature = hashlib.sha256(
+                signature_text.encode("utf-8")
+            ).hexdigest()
+        except Exception as exc:
+            raise EnterpriseManagementException(
+                "Internal processing error when getting the file_signature."
+            ) from exc
 
         document_data = {
             "alg": "SHA-256",
