@@ -68,12 +68,6 @@ class EnterpriseManager:
         if round(budget, 2) != budget:
             raise EnterpriseManagementException("Invalid budget")
 
-
-
-
-
-
-
         project = EnterpriseProject(
             company_cif=company_cif,
             project_acronym=project_achronym,
@@ -94,6 +88,9 @@ class EnterpriseManager:
             json.dump(data, file, indent=4)
 
         return project.project_id
+
+    def register_document (input_file: str):
+        pass
 
     @staticmethod
     def validate_cif(cif: str):
