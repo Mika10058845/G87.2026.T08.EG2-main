@@ -120,6 +120,37 @@ class EnterpriseManager:
         project_id = data["PROJECT_ID"]
         file_name = data["FILENAME"]
 
+        if not isinstance(project_id, str):
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        if len(project_id) != 32:
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        valid_hex = "0123456789abcdefABCDEF"
+        if not all(char in valid_hex for char in project_id):
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        if not isinstance(file_name, str):
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        valid_extensions = [".pdf", ".docx", ".xlsx"]
+        matched_extension = None
+        for extension in valid_extensions:
+            if file_name.endswith(extension):
+                matched_extension = extension
+                break
+
+        if matched_extension is None:
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        name = file_name[:-len(matched_extension)]
+
+        if len(name) != 8:
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
+        if not name.isalnum():
+            raise EnterpriseManagementException("JSON data has no valid values.")
+
         signature_text = (
                 "{alg:SHA-256, typ:DOCUMENT, project_id:"
                 + project_id
