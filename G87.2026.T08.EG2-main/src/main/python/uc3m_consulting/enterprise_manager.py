@@ -102,6 +102,21 @@ class EnterpriseManager:
         except json.JSONDecodeError as exc:
             raise EnterpriseManagementException("The file is not JSON formatted.") from exc
 
+        if not isinstance(data, dict):
+            raise EnterpriseManagementException(
+                "JSON does not have the expected structure."
+            )
+
+        if "PROJECT_ID" not in data or "FILENAME" not in data:
+            raise EnterpriseManagementException(
+                "JSON does not have the expected structure."
+            )
+
+        if len(data) != 2:
+            raise EnterpriseManagementException(
+                "JSON does not have the expected structure."
+            )
+
         project_id = data["PROJECT_ID"]
         file_name = data["FILENAME"]
 
