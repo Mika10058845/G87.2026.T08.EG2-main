@@ -94,7 +94,43 @@ class EnterpriseManager:
         return project.project_id
 
     def register_document(self, input_file: str):
-       pass
+        with open(input_file, "r", encoding="utf-8") as file:
+            data = json.load(file)
+
+        project_id = data["PROJECT_ID"]
+        file_name = data["FILENAME"]
+
+        signature_text = (
+                "{alg:SHA-256, typ:DOCUMENT, project_id:"
+                + project_id
+                + ", file_name:"
+                + file_name
+                + "}"
+        )
+
+        file_signature = hashlib.sha256(signature_text.encode("utf-8")).hexdigest()
+
+        document_data = {
+            "alg": "SHA-256",
+            "typ": "DOCUMENT",
+            "project_id": project_id,
+            "file_name": file_name,
+            "register_date": datetime.timestamp(datetime.now(timezone.utc)),
+            "file_signature": file_signature
+        }
+
+        if os.path.exists("all_documents.json"):
+            with open("all_documents.json", "r", encoding="utf-8") as file:
+                all_documents = json.load(file)
+        else:
+            all_documents = []
+
+        all_documents.append(document_data)
+
+        with open("all_documents.json", "w", encoding="utf-8") as file:
+            json.dump(all_documents, file, indent=4)
+
+        return file_signature
 
     @staticmethod
     def validate_cif(cif: str):
