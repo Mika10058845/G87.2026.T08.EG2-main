@@ -25,6 +25,8 @@ class TestRegisterDocument(TestCase):
             self.manager.register_document(self.file_path)
         self.assertEqual(str(context.exception), expected_message)
 
+    # VALID TESTS
+
     def test_register_document_tc01_valid_pdf(self):
         self._write_file(
             '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}'
@@ -46,10 +48,14 @@ class TestRegisterDocument(TestCase):
         value = self.manager.register_document(self.file_path)
         self.assertIsNotNone(value)
 
+    # INPUT FILE NOT FOUND
+
     def test_register_document_input_file_not_found(self):
         with self.assertRaises(EnterpriseManagementException) as context:
             self.manager.register_document("missing.json")
         self.assertEqual(str(context.exception), "Input file not found.")
+
+    # THE FILE IS NOT JSON FORMATTED
 
     def test_register_document_tc04_delete_root_node(self):
         self._assert_exception_message(
@@ -74,12 +80,6 @@ class TestRegisterDocument(TestCase):
         self._assert_exception_message(
             '{{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
             "The file is not JSON formatted."
-        )
-
-    def test_register_document_tc08_delete_fields(self):
-        self._assert_exception_message(
-            '{}',
-            "JSON does not have the expected structure."
         )
 
     def test_register_document_tc09_duplicate_fields(self):
@@ -241,18 +241,6 @@ class TestRegisterDocument(TestCase):
             "The file is not JSON formatted."
         )
 
-    def test_register_document_tc35_delete_project_id(self):
-        self._assert_exception_message(
-            '{"":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
-            "JSON does not have the expected structure."
-        )
-
-    def test_register_document_tc36_duplicate_project_id(self):
-        self._assert_exception_message(
-            '{"PROJECT_IDPROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
-            "JSON does not have the expected structure."
-        )
-
     def test_register_document_tc37_delete_labelfield1_end_quotation(self):
         self._assert_exception_message(
             '{"PROJECT_ID:"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
@@ -283,18 +271,6 @@ class TestRegisterDocument(TestCase):
             "The file is not JSON formatted."
         )
 
-    def test_register_document_tc42_delete_value1(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"","FILENAME":"ABC12345.pdf"}',
-            "JSON data has no valid values."
-        )
-
-    def test_register_document_tc43_duplicate_value1(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee784a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
-            "JSON data has no valid values."
-        )
-
     def test_register_document_tc44_delete_valuefield1_ending_quotation(self):
         self._assert_exception_message(
             '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7,"FILENAME":"ABC12345.pdf"}',
@@ -317,18 +293,6 @@ class TestRegisterDocument(TestCase):
         self._assert_exception_message(
             '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7",""FILENAME":"ABC12345.pdf"}',
             "The file is not JSON formatted."
-        )
-
-    def test_register_document_tc48_delete_filename(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","":"ABC12345.pdf"}',
-            "JSON does not have the expected structure."
-        )
-
-    def test_register_document_tc49_duplicate_filename(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAMEFILENAME":"ABC12345.pdf"}',
-            "JSON does not have the expected structure."
         )
 
     def test_register_document_tc50_delete_labelfield2_ending_quotation(self):
@@ -358,18 +322,6 @@ class TestRegisterDocument(TestCase):
     def test_register_document_tc54_duplicate_valuefield2_starting_quotation(self):
         self._assert_exception_message(
             '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":""ABC12345.pdf"}',
-            "JSON data has no valid values."
-        )
-
-    def test_register_document_tc55_delete_value2(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":""}',
-            "JSON data has no valid values."
-        )
-
-    def test_register_document_tc56_duplicate_value2(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdfABC12345.pdf"}',
             "The file is not JSON formatted."
         )
 
@@ -391,12 +343,6 @@ class TestRegisterDocument(TestCase):
             "The file is not JSON formatted."
         )
 
-    def test_register_document_tc60_modify_project_id_label(self):
-        self._assert_exception_message(
-            '{"PROJ_CT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
-            "JSON does not have the expected structure."
-        )
-
     def test_register_document_tc61_modify_quotation_33(self):
         self._assert_exception_message(
             '{"PROJECT_ID:"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
@@ -407,12 +353,6 @@ class TestRegisterDocument(TestCase):
         self._assert_exception_message(
             '{"PROJECT_ID":84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
             "The file is not JSON formatted."
-        )
-
-    def test_register_document_tc63_modify_project_id_value(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"84a2b5_bfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
-            "JSON data has no valid values."
         )
 
     def test_register_document_tc64_modify_quotation_36(self):
@@ -427,12 +367,6 @@ class TestRegisterDocument(TestCase):
             "The file is not JSON formatted."
         )
 
-    def test_register_document_tc66_modify_filename_label(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILE_NAM":"ABC12345.pdf"}',
-            "JSON does not have the expected structure."
-        )
-
     def test_register_document_tc67_modify_quotation_39(self):
         self._assert_exception_message(
             '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME:"ABC12345.pdf"}',
@@ -443,6 +377,88 @@ class TestRegisterDocument(TestCase):
         self._assert_exception_message(
             '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":ABC12345.pdf"}',
             "The file is not JSON formatted."
+        )
+
+    def test_register_document_tc73_modify_quotation_43(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf}',
+            "The file is not JSON formatted."
+        )
+
+    # JSON DOES NOT HAVE THE EXPECTED STRUCTURE
+
+    def test_register_document_tc08_delete_fields(self):
+        self._assert_exception_message(
+            '{}',
+            "JSON does not have the expected structure."
+        )
+
+    def test_register_document_tc35_delete_project_id(self):
+        self._assert_exception_message(
+            '{"":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
+            "JSON does not have the expected structure."
+        )
+
+    def test_register_document_tc36_duplicate_project_id(self):
+        self._assert_exception_message(
+            '{"PROJECT_IDPROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
+            "JSON does not have the expected structure."
+        )
+
+    def test_register_document_tc48_delete_filename(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","":"ABC12345.pdf"}',
+            "JSON does not have the expected structure."
+        )
+
+    def test_register_document_tc49_duplicate_filename(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAMEFILENAME":"ABC12345.pdf"}',
+            "JSON does not have the expected structure."
+        )
+
+    def test_register_document_tc60_modify_project_id_label(self):
+        self._assert_exception_message(
+            '{"PROJ_CT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
+            "JSON does not have the expected structure."
+        )
+
+    def test_register_document_tc66_modify_filename_label(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILE_NAM":"ABC12345.pdf"}',
+            "JSON does not have the expected structure."
+        )
+
+    # JSON DATA HAS NO VALID VALUES
+
+    def test_register_document_tc42_delete_value1(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"","FILENAME":"ABC12345.pdf"}',
+            "JSON data has no valid values."
+        )
+
+    def test_register_document_tc43_duplicate_value1(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee784a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
+            "JSON data has no valid values."
+        )
+
+    def test_register_document_tc55_delete_value2(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":""}',
+            "JSON data has no valid values."
+        )
+
+    def test_register_document_tc56_duplicate_value2(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdfABC12345.pdf"}',
+            "JSON data has no valid values."
+        )
+
+    def test_register_document_tc63_modify_project_id_value(self):
+        self._assert_exception_message(
+            '{"PROJECT_ID":"84a2b5_bfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf"}',
+            "JSON data has no valid values."
         )
 
     def test_register_document_tc69_delete_name(self):
@@ -467,12 +483,6 @@ class TestRegisterDocument(TestCase):
         self._assert_exception_message(
             '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf.pdf"}',
             "JSON data has no valid values."
-        )
-
-    def test_register_document_tc73_modify_quotation_43(self):
-        self._assert_exception_message(
-            '{"PROJECT_ID":"84a2b5abfa27576259e41a033d07cee7","FILENAME":"ABC12345.pdf}',
-            "The file is not JSON formatted."
         )
 
     def test_register_document_tc74_modify_name(self):

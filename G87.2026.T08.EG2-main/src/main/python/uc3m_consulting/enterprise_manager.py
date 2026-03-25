@@ -94,8 +94,11 @@ class EnterpriseManager:
         return project.project_id
 
     def register_document(self, input_file: str):
-        with open(input_file, "r", encoding="utf-8") as file:
-            data = json.load(file)
+        try:
+            with open(input_file, "r", encoding="utf-8") as file:
+                data = json.load(file)
+        except FileNotFoundError as exc:
+            raise EnterpriseManagementException("Input file not found.") from exc
 
         project_id = data["PROJECT_ID"]
         file_name = data["FILENAME"]
