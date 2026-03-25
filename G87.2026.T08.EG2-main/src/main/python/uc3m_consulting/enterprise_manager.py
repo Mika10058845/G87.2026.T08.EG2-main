@@ -99,6 +99,8 @@ class EnterpriseManager:
                 data = json.load(file)
         except FileNotFoundError as exc:
             raise EnterpriseManagementException("Input file not found.") from exc
+        except json.JSONDecodeError as exc:
+            raise EnterpriseManagementException("The file is not JSON formatted.") from exc
 
         project_id = data["PROJECT_ID"]
         file_name = data["FILENAME"]
