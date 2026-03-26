@@ -1,6 +1,5 @@
 import enterprise_project
 
-
 def showMD5():  # usage
 
     obj = enterprise_project.EnterpriseProject(
