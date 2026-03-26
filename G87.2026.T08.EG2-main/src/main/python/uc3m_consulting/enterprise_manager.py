@@ -187,3 +187,10 @@ class EnterpriseManager:
     def validate_cif(cif: str):
         """Returns True if the CIF received is valid, False otherwise."""
         return True
+
+    def check_project_budget(self, project_id: str) -> bool:
+        """
+        Checks if the project ID exists in flows.json and calculates the total budget.
+        Returns True if successful, raises EnterpriseManagementException otherwise.
+        """
+        pass
