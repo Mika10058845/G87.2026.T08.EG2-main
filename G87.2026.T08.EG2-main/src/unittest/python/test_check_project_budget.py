@@ -60,6 +60,10 @@ class TestCheckProjectBudget(unittest.TestCase):
         self.assertTrue(result)
         if os.path.exists("flows.json"):
             os.remove("flows.json")
+        # Clean up the generated output file
+        output_file = "budget_11111111111111111111111111111111.json"
+        if os.path.exists(output_file):
+            os.remove(output_file)
 
 if __name__ == '__main__':
     unittest.main()

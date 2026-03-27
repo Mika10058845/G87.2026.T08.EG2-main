@@ -1,6 +1,7 @@
 """Module."""
 import json
 import os
+import re
 import hashlib
 from datetime import datetime, timezone
 
@@ -193,4 +194,46 @@ class EnterpriseManager:
         Checks if the project ID exists in flows.json and calculates the total budget.
         Returns True if successful, raises EnterpriseManagementException otherwise.
         """
-        pass
+        # 1. Validierung der PROJECT_ID (32 Hex-Zeichen)
+        if not isinstance(project_id, str) or not re.fullmatch(r"[0-9a-fA-F]{32}", project_id):
+            raise EnterpriseManagementException("Invalid PROJECT_ID format")
+
+        # 2. Prüfen, ob die flows.json existiert
+        if not os.path.exists("flows.json"):
+            raise EnterpriseManagementException("File not found or cannot be read")
+
+        # Datei lesen
+        try:
+            with open("flows.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception as ex:
+            raise EnterpriseManagementException("File not found or cannot be read") from ex
+
+        # 3. Schleife durch die Einträge
+        project_found = False
+        total_budget = 0.0
+
+        for item in data:
+            if item.get("PROJECT ID") == project_id:
+                project_found = True
+                if "inflow" in item:
+                    total_budget += float(item["inflow"])
+                elif "outflow" in item:
+                    total_budget -= float(item["outflow"])
+
+        # 4. Wurde das Projekt überhaupt gefunden?
+        if not project_found:
+            raise EnterpriseManagementException("Project not found in flows")
+
+        # 5. Ausgabe-JSON generieren und speichern
+        result_data = {
+            "PROJECT ID": project_id,
+            "Date": datetime.now(timezone.utc).isoformat(),
+            "Total Budget": total_budget
+        }
+
+        output_filename = f"budget_{project_id}.json"
+        with open(output_filename, "w", encoding="utf-8") as f:
+            json.dump(result_data, f, indent=4)
+
+        return True
